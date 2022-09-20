@@ -1,0 +1,39 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+
+   - name: install python3, pip3 and java open-jdk package for ubuntu
+     apt:
+       name:
+         - python3
+         - python3-pip
+         - openjdk-8-jre
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu" 
+
+   - name: install python3, pip3 and java open-jdk package for centos
+     dnf:
+       name:
+         - python3
+         - python3-pip
+         - java-1.8.0-openjdk
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
+    
+   - name: configure the login banner
+     cisco.iosxr.iosxr_banner:
+       banner: login
+       text: Ansible Managed node by twinkle
+       state: present
+     when: ansible_distribution == "Ubuntu"
+
+   - name: configure the login banner
+     cisco.iosxr.iosxr_banner:
+       banner: login
+       text: Ansible Managed node by twinkle
+       state: present
+     when: ansible_distribution == "CentOS"
+
